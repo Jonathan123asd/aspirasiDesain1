@@ -1,123 +1,153 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - Pengaduan Sekolah</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
-        body { background-color: #f8f9fa; }
-        .navbar-brand { font-weight: bold; }
-        .card { border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .status-badge { padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; }
-        .badge-pending { background-color: #ffc107; color: #000; }
-        .badge-proses { background-color: #0d6efd; color: #fff; }
-        .badge-selesai { background-color: #198754; color: #fff; }
+        body {
+            background-color: #f4f6f9;
+            overflow-x: hidden;
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            border-radius: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border: none;
+        }
+
+        /* ===== STATUS BADGE ===== */
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .badge-pending {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .badge-proses {
+            background: #0d6efd;
+            color: #fff;
+        }
+
+        .badge-selesai {
+            background: #198754;
+            color: #fff;
+        }
+
+        /* ===== SIDEBAR DESKTOP ===== */
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar .nav-link {
+            color: #6c757d;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #f1f3f5;
+            color: #0d6efd;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #e7f1ff;
+            color: #0d6efd;
+            border-left: 4px solid #0d6efd;
+        }
+
+        .user-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        /* ===== CONTENT SHIFT ===== */
+        .main-content {
+            margin-left: 260px;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 991px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
     </style>
 </head>
+
 <body>
-@auth
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
-        <a class="navbar-brand" href="{{ Auth::user()->role == 'admin' ? route('admin.dashboard') : route('siswa.dashboard') }}">
-            <i class="bi bi-megaphone"></i> Pengaduan Sekolah
-        </a>
 
-        <!-- Tambahkan navbar toggler untuk mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    @auth
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- Menu navigation -->
-            <ul class="navbar-nav me-auto">
-                <!-- Menu untuk Admin -->
-                @if(Auth::user()->role == 'admin')
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
-                       href="{{ route('admin.dashboard') }}">
-                        <i class="bi bi-speedometer2"></i> Dashboard
-                    </a>
-                </li>
+        <div class="d-flex">
 
-                <!-- INI YANG DITAMBAH: Menu Manajemen User -->
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}"
-                       href="{{ route('admin.users.index') }}">
-                        <i class="bi bi-people"></i> Manajemen User
-                        @php
-                            $pendingCount = \App\Models\User::where('status', 'pending')
-                                ->where('role', 'siswa')
-                                ->count();
-                        @endphp
-                        @if($pendingCount > 0)
-                        <span class="badge bg-danger">{{ $pendingCount }}</span>
-                        @endif
-                    </a>
-                </li>
-                @endif
+            {{-- SIDEBAR DESKTOP --}}
+            <div class="sidebar d-none d-lg-flex">
+                @include('layouts.sidebar')
+            </div>
 
-                <!-- Menu untuk Siswa -->
-                @if(Auth::user()->role == 'siswa')
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('siswa/dashboard') ? 'active' : '' }}"
-                       href="{{ route('siswa.dashboard') }}">
-                        <i class="bi bi-house"></i> Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('siswa/form') ? 'active' : '' }}"
-                       href="{{ route('siswa.form') }}">
-                        <i class="bi bi-plus-circle"></i> Buat Pengaduan
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('siswa/history') ? 'active' : '' }}"
-                       href="{{ route('siswa.history') }}">
-                        <i class="bi bi-clock-history"></i> History
-                    </a>
-                </li>
-                @endif
-            </ul>
+            {{-- MAIN CONTENT --}}
+            <div class="main-content">
 
-            <!-- User info & Logout (tetap di kanan) -->
-            <div class="navbar-nav ms-auto">
-                <span class="navbar-text text-white me-3">
-                    <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
-                </span>
-                <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-sm btn-outline-light">
-                        <i class="bi bi-box-arrow-right"></i> Logout
+                {{-- TOPBAR MOBILE --}}
+                <nav class="navbar navbar-light bg-white shadow-sm d-lg-none px-3">
+                    <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+                        <i class="bi bi-list"></i>
                     </button>
-                </form>
+                    <span class="fw-semibold">Dashboard</span>
+                </nav>
+
+                <div class="p-4">
+                    @include('layouts.alert')
+                    @yield('content')
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- OFFCANVAS MOBILE --}}
+        <div class="offcanvas offcanvas-start text-bg-primary" tabindex="-1" id="mobileSidebar">
+            <div class="offcanvas-body p-0">
+                @include('layouts.sidebar')
             </div>
         </div>
-    </div>
-</nav>
-@endauth
-
-    <div class="container mt-4">
-        @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    @else
+        <div class="container mt-5">
+            @yield('content')
         </div>
-        @endif
 
-        @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle"></i> {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        @endif
+    @endauth
 
-        @yield('content')
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @yield('scripts')
+
 </body>
+
 </html>

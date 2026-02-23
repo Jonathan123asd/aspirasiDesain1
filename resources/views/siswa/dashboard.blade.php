@@ -3,111 +3,146 @@
 @section('title', 'Dashboard Siswa')
 
 @section('content')
-<div class="row mb-4">
-    <div class="col-md-12">
-        <h2><i class="bi bi-house-door"></i> Dashboard Siswa</h2>
-        <p class="text-muted">Selamat datang, {{ Auth::user()->name }} (Kelas: {{ Auth::user()->kelas }})</p>
-    </div>
-</div>
+<div class="container-fluid px-4 py-4">
 
-<!-- Statistik -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body text-center">
-                <h5><i class="bi bi-list-check"></i> Total</h5>
-                <h2>{{ $statistik['total'] }}</h2>
-            </div>
-        </div>
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="fw-bold mb-1">Dashboard</h2>
+        <p class="text-muted mb-0">
+            Selamat Datang {{ Auth::user()->name }}
+        </p>
     </div>
-    <div class="col-md-3">
-        <div class="card bg-warning">
-            <div class="card-body text-center">
-                <h5><i class="bi bi-clock"></i> Pending</h5>
-                <h2>{{ $statistik['pending'] }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-info text-white">
-            <div class="card-body text-center">
-                <h5><i class="bi bi-gear"></i> Proses</h5>
-                <h2>{{ $statistik['proses'] }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-success text-white">
-            <div class="card-body text-center">
-                <h5><i class="bi bi-check-circle"></i> Selesai</h5>
-                <h2>{{ $statistik['selesai'] }}</h2>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Tombol Aksi -->
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="d-grid gap-2 d-md-flex">
-            <a href="{{ route('siswa.form') }}" class="btn btn-success me-2">
-                <i class="bi bi-plus-circle"></i> Buat Pengaduan Baru
-            </a>
-            <a href="{{ route('siswa.history') }}" class="btn btn-secondary">
-                <i class="bi bi-clock-history"></i> Lihat Semua Pengaduan
-            </a>
-        </div>
-    </div>
-</div>
+    <!-- Statistik -->
+    <div class="row g-4 mb-4">
 
-<!-- Pengaduan Terbaru -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0"><i class="bi bi-clock"></i> Pengaduan Terbaru</h5>
-            </div>
-            <div class="card-body">
-                @if($pengaduan->count() > 0)
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Tanggal</th>    
-                                <th>Kategori</th>
-                                <th>Deskripsi</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($pengaduan as $item)
-                            <tr>
-                                <td>{{ date('d/m/Y', strtotime($item->tanggal)) }}</td>
-                                <td>{{ $item->kategori }}</td>
-                                <td>{{ Str::limit($item->deskripsi, 50) }}</td>
-                                <td>
-                                    @if($item->status == 'pending')
-                                        <span class="status-badge badge-pending">Pending</span>
-                                    @elseif($item->status == 'proses')
-                                        <span class="status-badge badge-proses">Proses</span>
-                                    @else
-                                        <span class="status-badge badge-selesai">Selesai</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+        @php
+            $cards = [
+                ['title' => 'Total Pengaduan', 'value' => $statistik['total'], 'icon' => 'bi-file-earmark-text'],
+                ['title' => 'Menunggu', 'value' => $statistik['pending'], 'icon' => 'bi-clock-history'],
+                ['title' => 'Dalam Proses', 'value' => $statistik['proses'], 'icon' => 'bi-exclamation-triangle'],
+                ['title' => 'Selesai', 'value' => $statistik['selesai'], 'icon' => 'bi-check-circle']
+            ];
+        @endphp
+
+        @foreach($cards as $card)
+        <div class="col-md-3">
+            <div class="card stat-card border-0 rounded-4 p-4 text-center">
+                <div class="icon-box mb-3">
+                    <i class="bi {{ $card['icon'] }} fs-3"></i>
                 </div>
-                @else
-                <div class="text-center py-4">
-                    <i class="bi bi-inbox display-1 text-muted"></i>
-                    <p class="mt-3">Belum ada pengaduan. Yuk buat pengaduan pertama!</p>
-                    <a href="{{ route('siswa.form') }}" class="btn btn-primary">Buat Pengaduan</a>
-                </div>
-                @endif
+                <h6 class="text-muted mb-2">{{ $card['title'] }}</h6>
+                <h2 class="fw-bold mb-0">{{ $card['value'] }}</h2>
+            </div>
+        </div>
+        @endforeach
+
+    </div>
+
+    <!-- Banner CTA -->
+    <div class="card border-0 rounded-4 p-4 text-white mb-5 cta-banner">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h5 class="fw-bold">Ada Keluhan?</h5>
+                <p class="mb-3">Laporkan Sarana dan Prasarana yang Rusak di Sekolah</p>
+                <a href="{{ route('siswa.form') }}" class="btn btn-light rounded-pill px-4 fw-semibold">
+                    + Buat Pengaduan Baru
+                </a>
+            </div>
+            <div class="col-md-4 text-end d-none d-md-block">
+                <i class="bi bi-file-earmark-text display-3 opacity-50"></i>
             </div>
         </div>
     </div>
+
+    <!-- Pengaduan Terbaru -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Pengaduan Terbaru</h5>
+        <a href="{{ route('siswa.history') }}" class="text-decoration-none fw-semibold">
+            Lihat Semua
+        </a>
+    </div>
+
+    @forelse($pengaduan as $item)
+    <div class="card border-0 rounded-4 p-4 mb-3 complaint-card">
+
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <h6 class="fw-bold mb-0">{{ $item->kategori }}</h6>
+
+            @if($item->status == 'pending')
+                <span class="badge rounded-pill bg-warning text-dark px-3 py-2">Menunggu</span>
+            @elseif($item->status == 'proses')
+                <span class="badge rounded-pill bg-primary px-3 py-2">Dalam Proses</span>
+            @else
+                <span class="badge rounded-pill bg-success px-3 py-2">Selesai</span>
+            @endif
+        </div>
+
+        <p class="text-muted mb-3">
+            {{ Str::limit($item->deskripsi, 120) }}
+        </p>
+
+        <div class="small text-muted">
+            <i class="bi bi-calendar"></i>
+            {{ date('d/m/Y', strtotime($item->tanggal)) }}
+        </div>
+
+    </div>
+    @empty
+        <div class="text-center py-5">
+            <i class="bi bi-inbox display-4 text-muted"></i>
+            <p class="mt-3">Belum ada pengaduan.</p>
+            <a href="{{ route('siswa.form') }}" class="btn btn-primary rounded-pill px-4">
+                Buat Pengaduan
+            </a>
+        </div>
+    @endforelse
+
 </div>
+
+
+<style>
+
+body {
+    background: #f5f7fb;
+}
+
+.stat-card {
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    transition: 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    background: #eef2ff;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.cta-banner {
+    background: linear-gradient(135deg, #2f5de2, #4f8dfd);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+}
+
+.complaint-card {
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+    transition: 0.3s ease;
+}
+
+.complaint-card:hover {
+    transform: translateY(-3px);
+}
+
+</style>
+
 @endsection

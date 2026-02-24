@@ -8,9 +8,20 @@
     <hr class="my-2">
 
     {{-- USER INFO --}}
-    <div class="px-3 mb-3">
-        <div class="fw-semibold">{{ Auth::user()->name }}</div>
-        <small class="text-muted">{{ ucfirst(Auth::user()->role) }}</small>
+    <div class="px-3 mt-2 mb-2 d-flex align-items-center gap-3">
+        {{-- Initial Avatar --}}
+        <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center fw-bold text-primary"
+            style="width: 45px; height: 45px; font-size: 1.2rem;">
+            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+        </div>
+
+        {{-- User Details --}}
+        <div>
+            <div class="fw-semibold">{{ Auth::user()->name }}</div>
+            <small class="text-muted">
+                {{ ucfirst(Auth::user()->role) }}
+            </small>
+        </div>
     </div>
 
     <hr class="my-2">
@@ -23,23 +34,21 @@
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"
-                   href="{{ route('admin.dashboard') }}">
+                    href="{{ route('admin.dashboard') }}">
                     <i class="bi bi-speedometer2 me-2"></i> Dashboard
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ request()->is('admin/users*') ? 'active' : '' }}"
-                   href="{{ route('admin.users.index') }}">
+                    href="{{ route('admin.users.index') }}">
 
                     <span>
                         <i class="bi bi-people me-2"></i> Manajemen User
                     </span>
 
                     @php
-                        $pendingCount = \App\Models\User::where('status','pending')
-                                        ->where('role','siswa')
-                                        ->count();
+                        $pendingCount = \App\Models\User::where('status', 'pending')->where('role', 'siswa')->count();
                     @endphp
 
                     @if ($pendingCount > 0)
@@ -55,28 +64,26 @@
 
         {{-- SISWA --}}
         @if (Auth::user()->role == 'siswa')
-
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('siswa/dashboard') ? 'active' : '' }}"
-                   href="{{ route('siswa.dashboard') }}">
+                    href="{{ route('siswa.dashboard') }}">
                     <i class="bi bi-house me-2"></i> Dashboard
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('siswa/form') ? 'active' : '' }}"
-                   href="{{ route('siswa.form') }}">
+                    href="{{ route('siswa.form') }}">
                     <i class="bi bi-plus-circle me-2"></i> Buat Pengaduan
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('siswa/history') ? 'active' : '' }}"
-                   href="{{ route('siswa.history') }}">
+                    href="{{ route('siswa.history') }}">
                     <i class="bi bi-clock-history me-2"></i> History
                 </a>
             </li>
-
         @endif
 
     </ul>

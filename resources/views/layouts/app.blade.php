@@ -53,9 +53,21 @@
             top: 0;
         }
 
+        .sidebar .nav {
+            margin-top: 8px;
+        }
+
+        .sidebar .nav-item {
+            margin-bottom: 6px;
+        }
+
+        .sidebar .nav-link {
+            padding: 10px 12px;
+        }
+
         .sidebar .nav-link {
             color: #6c757d;
-            padding: 10px 14px;
+            padding: 10px 12px;
             border-radius: 6px;
             margin-bottom: 4px;
             font-weight: 500;

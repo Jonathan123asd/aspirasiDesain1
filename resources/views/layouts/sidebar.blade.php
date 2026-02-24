@@ -1,33 +1,32 @@
 <div class="sidebar bg-white border-end d-flex flex-column">
 
-    {{-- LOGO --}}
+    {{-- LOGO & USER INFO --}}
     <div class="px-3 pt-4 pb-2">
-        <img src="{{ asset('images/Logo.png') }}" class="img-fluid" style="max-height:50px;">
-    </div>
-
-    <hr class="my-2">
-
-    {{-- USER INFO --}}
-    <div class="px-3 mt-2 mb-2 d-flex align-items-center gap-3">
-        {{-- Initial Avatar --}}
-        <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center fw-bold text-primary"
-            style="width: 45px; height: 45px; font-size: 1.2rem;">
-            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+        {{-- Logo di tengah --}}
+        <div class=" mb-3">
+            <img src="{{ asset('images/Logo.png') }}" class="img-fluid" style="max-height: 50px;">
         </div>
 
-        {{-- User Details --}}
-        <div>
-            <div class="fw-semibold">{{ Auth::user()->name }}</div>
-            <small class="text-muted">
-                {{ ucfirst(Auth::user()->role) }}
-            </small>
+        {{-- USER INFO --}}
+        <div class="d-flex align-items-center gap-3">
+            {{-- Initial Avatar --}}
+            <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center fw-bold text-primary flex-shrink-0"
+                style="width: 45px; height: 45px; font-size: 1.2rem;">
+                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+            </div>
+
+            {{-- User Details --}}
+            <div class="overflow-hidden">
+                <div class="fw-semibold text-truncate">{{ Auth::user()->name }}</div>
+                <small class="text-muted d-flex align-items-center">
+                    {{ ucfirst(Auth::user()->role) }}
+                </small>
+            </div>
         </div>
     </div>
-
-    <hr class="my-2">
 
     {{-- MENU --}}
-    <ul class="nav flex-column px-2">
+    <ul class="nav flex-column px-3 mt-3 mb-5">
 
         {{-- ADMIN --}}
         @if (Auth::user()->role == 'admin')
@@ -65,30 +64,33 @@
         {{-- SISWA --}}
         @if (Auth::user()->role == 'siswa')
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('siswa/dashboard') ? 'active' : '' }}"
+                <a class="nav-link d-flex align-items-center {{ request()->is('siswa/dashboard') ? 'active' : '' }}"
                     href="{{ route('siswa.dashboard') }}">
-                    <i class="bi bi-house me-2"></i> Dashboard
+                    <i class="bi bi-house-door me-3"></i>
+                    <span>Dashboard</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('siswa/form') ? 'active' : '' }}"
+                <a class="nav-link d-flex align-items-center {{ request()->is('siswa/form') ? 'active' : '' }}"
                     href="{{ route('siswa.form') }}">
-                    <i class="bi bi-plus-circle me-2"></i> Buat Pengaduan
+                    <i class="bi bi-plus-circle me-3"></i>
+                    <span>Buat Pengaduan</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('siswa/history') ? 'active' : '' }}"
+                <a class="nav-link d-flex align-items-center {{ request()->is('siswa/history') ? 'active' : '' }}"
                     href="{{ route('siswa.history') }}">
-                    <i class="bi bi-clock-history me-2"></i> History
+                    <i class="bi bi-clock-history me-3"></i>
+                    <span>Riwayat Pengaduan</span>
                 </a>
             </li>
         @endif
 
     </ul>
 
-    <hr class="mt-auto">
+
 
     {{-- LOGOUT --}}
     <div class="p-3 mt-auto">

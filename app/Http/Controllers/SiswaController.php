@@ -83,16 +83,31 @@ class SiswaController extends Controller
     }
 
     // History pengaduan
-    public function history()
+    public function history(Request $request)
     {
-        $pengaduan = Pengaduan::with('respon.admin')
-            ->where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = Pengaduan::with('respon.admin')
+            ->where('user_id', Auth::id());
+
+        // SEARCH
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('judul', 'like', '%' . $request->search . '%')
+                    ->orWhere('deskripsi', 'like', '%' . $request->search . '%')
+                    ->orWhere('kategori', 'like', '%' . $request->search . '%')
+                    ->orWhere('lokasi', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // FILTER STATUS
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        $pengaduan = $query->orderBy('created_at', 'desc')->get();
 
         return view('siswa.history', compact('pengaduan'));
     }
-
+    
     public function show($id)
     {
         $pengaduan = Pengaduan::with(['respon.admin'])

@@ -11,22 +11,38 @@
 
     <div class="card border-0 rounded-4 p-4 bg-light">
 
-        {{-- Search & Filter --}}
-        <div class="row mb-4">
-            <div class="col-md-8">
-                <div class="search-box d-flex align-items-center gap-3">
-                    <i class="bi bi-search text-muted"></i>
-                    <input type="text" placeholder="Cari Pengaduan...">
+        <form method="GET" action="{{ route('siswa.history') }}">
+            {{-- Search & Filter --}}
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="search-box d-flex align-items-center gap-3">
+                        <i class="bi bi-search text-muted"></i>
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            placeholder="Cari Pengaduan...">
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-4">
-                <div class="filter-box d-flex align-items-center justify-content-center gap-2">
-                    <i class="bi bi-funnel text-muted"></i>
-                    <span>Semua Status</span>
+                <div class="col-md-4">
+                    <div class="filter-box d-flex align-items-center justify-content-center gap-2 position-relative">
+                        <i class="bi bi-funnel text-muted"></i>
+
+                        <select name="status" class="position-absolute top-0 start-0 w-100 h-100 opacity-0"
+                            onchange="this.form.submit()">
+
+                            <option value="">Semua Status</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="proses" {{ request('status') == 'proses' ? 'selected' : '' }}>Dalam Proses
+                            </option>
+                            <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                        </select>
+
+                        <span>
+                            {{ request('status') ? ucfirst(request('status')) : 'Semua Status' }}
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
 
         {{-- List Pengaduan --}}
         @if ($pengaduan->count())
@@ -102,3 +118,21 @@
     </div>
 
 @endsection
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.querySelector('input[name="search"]');
+    const form = searchInput.closest('form');
+
+    let typingTimer;
+    const delay = 500; // 500ms setelah berhenti mengetik
+
+    searchInput.addEventListener('keyup', function () {
+        clearTimeout(typingTimer);
+
+        typingTimer = setTimeout(function () {
+            form.submit();
+        }, delay);
+    });
+});
+</script>

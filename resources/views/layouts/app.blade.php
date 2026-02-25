@@ -15,6 +15,12 @@
             overflow-x: hidden;
         }
 
+        /* select history */
+        select.filter-box {
+            appearance: none;
+            outline: none;
+        }
+
         /* ===== CARD ===== */
         .card {
             border-radius: 14px;

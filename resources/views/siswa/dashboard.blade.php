@@ -90,8 +90,9 @@
         @forelse($pengaduan as $item)
             <div class="card border-0 rounded-4 p-4 mb-3 complaint-card">
 
+
                 <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h6 class="fw-bold mb-0">{{ $item->kategori }}</h6>
+                    <h6 class="fw-bold mb-0">{{ $item->judul }}</h6>
 
                     @if ($item->status == 'pending')
                         <span class="badge rounded-pill bg-warning text-dark px-3 py-2">Menunggu</span>

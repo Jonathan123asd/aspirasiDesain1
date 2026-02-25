@@ -47,20 +47,36 @@ class SiswaController extends Controller
 
         // Validasi
         $request->validate([
+            'judul' => 'required|string|max:100',
             'kategori' => 'required|string|max:50',
             'deskripsi' => 'required|string|min:10',
-            'lokasi' => 'nullable|string|max:100'
+            'lokasi' => 'nullable|string|max:100',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'urgensi' => 'required|in:rendah,sedang,tinggi'
         ]);
+
+        $imagePath = null;
+
+        // Simpan file jika ada
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('pengaduan', 'public');
+        }
+
 
         // Simpan ke database
         Pengaduan::create([
             'user_id' => Auth::id(),
+            'judul' => $request->judul,
+            'urgensi' => $request->urgensi,
             'kategori' => $request->kategori,
             'deskripsi' => $request->deskripsi,
             'lokasi' => $request->lokasi,
+            'image' => $imagePath,
             'tanggal' => now()->toDateString(),
             'status' => 'pending'
         ]);
+
+
 
         return redirect()->route('siswa.history')
             ->with('success', 'Pengaduan berhasil dikirim!');
@@ -75,5 +91,14 @@ class SiswaController extends Controller
             ->get();
 
         return view('siswa.history', compact('pengaduan'));
+    }
+
+    public function show($id)
+    {
+        $pengaduan = Pengaduan::with(['respon.admin'])
+            ->where('user_id', Auth::id()) // supaya siswa tidak bisa akses milik orang lain
+            ->findOrFail($id);
+
+        return view('siswa.detail', compact('pengaduan'));
     }
 }

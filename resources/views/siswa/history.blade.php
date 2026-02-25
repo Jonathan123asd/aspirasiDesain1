@@ -1,79 +1,104 @@
 @extends('layouts.app')
 
-@section('title', 'History Pengaduan')
+@section('title', 'Riwayat Pengaduan')
 
 @section('content')
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <h2><i class="bi bi-clock-history"></i> History Pengaduan</h2>
-            <p class="text-muted">Daftar seluruh pengaduan yang pernah kamu buat</p>
-        </div>
+
+    <div class="mb-4">
+        <h1 class="fw-bold" style="font-size:32px;">Riwayat Pengaduan</h1>
+        <p class="text-muted">Lihat Status dan Riwayat Pengaduan Anda</p>
     </div>
 
-    <div class="card">
-        <div class="card-header bg-secondary text-white">
-            <h5 class="mb-0"><i class="bi bi-list-check"></i> Data Pengaduan</h5>
-        </div>
-        <div class="card-body">
-            @if ($pengaduan->count())
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Kategori</th>
-                                <th>Deskripsi</th>
-                                <th>Lokasi</th>
-                                <th>Status</th>
-                                <th>Pesan Admin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($pengaduan as $item)
-                                <tr>
-                                    <td>{{ date('d/m/Y', strtotime($item->tanggal)) }}</td>
-                                    <td>{{ $item->kategori }}</td>
-                                    <td>{{ Str::limit($item->deskripsi, 60) }}</td>
-                                    <td>{{ $item->lokasi ?? '-' }}</td>
-                                    <td>
-                                        @if ($item->status == 'pending')
-                                            <span class="status-badge badge-pending">Pending</span>
-                                        @elseif($item->status == 'proses')
-                                            <span class="status-badge badge-proses">Proses</span>
-                                        @else
-                                            <span class="status-badge badge-selesai">Selesai</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($item->respon->count())
-                                            @foreach ($item->respon as $respon)
-                                                <div class="mb-2 p-2 border rounded">
-                                                    <strong>{{ $respon->admin->name }}</strong><br>
-                                                    <small class="text-muted">
-                                                        {{ $respon->created_at->format('d/m/Y H:i') }}
-                                                    </small>
-                                                    <p class="mb-0">{{ $respon->pesan }}</p>
-                                                </div>
-                                            @endforeach
-                                        @else
-                                            <span class="text-muted">Belum ada respon admin</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+    <div class="card border-0 rounded-4 p-4 bg-light">
+
+        {{-- Search & Filter --}}
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="search-box d-flex align-items-center gap-3">
+                    <i class="bi bi-search text-muted"></i>
+                    <input type="text" placeholder="Cari Pengaduan...">
                 </div>
-            @else
-                <div class="text-center py-4">
-                    <i class="bi bi-inbox display-1 text-muted"></i>
-                    <p class="mt-3">Belum ada pengaduan.</p>
+            </div>
+
+            <div class="col-md-4">
+                <div class="filter-box d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-funnel text-muted"></i>
+                    <span>Semua Status</span>
                 </div>
-            @endif
+            </div>
         </div>
+
+        {{-- List Pengaduan --}}
+        @if ($pengaduan->count())
+
+            @foreach ($pengaduan as $item)
+                <a href="{{ route('pengaduan.show', $item->id) }}" class="text-decoration-none text-dark">
+
+                    <div class="pengaduan-card mb-4 p-4 bg-white rounded-4 shadow-sm">
+
+                        {{-- Header --}}
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-semibold mb-0">
+                                {{ $item->judul ?? 'Pengaduan' }}
+                            </h5>
+
+                            @if ($item->status == 'pending')
+                                <span class="status-pill status-pending">
+                                    <i class="bi bi-clock me-1"></i> Pending
+                                </span>
+                            @elseif($item->status == 'proses')
+                                <span class="status-pill status-proses">
+                                    <i class="bi bi-exclamation-circle me-1"></i> Dalam Proses
+                                </span>
+                            @elseif($item->status == 'selesai')
+                                <span class="status-pill status-selesai">
+                                    <i class="bi bi-check-circle me-1"></i> Selesai
+                                </span>
+                            @endif
+                        </div>
+
+                        {{-- Deskripsi --}}
+                        <p class="mb-4">
+                            {{ \Illuminate\Support\Str::limit($item->deskripsi, 120) }}
+                        </p>
+
+                        {{-- Meta Info --}}
+                        <div class="d-flex flex-wrap gap-4 meta-info">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-tag"></i>
+                                <span>{{ $item->kategori }}</span>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>{{ $item->lokasi ?? 'Tidak tersedia' }}</span>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-calendar"></i>
+                                <span>{{ date('d/m/Y', strtotime($item->tanggal)) }}</span>
+                            </div>
+
+                            @if ($item->respon->count())
+                                <div class="d-flex align-items-center gap-2 text-success">
+                                    <i class="bi bi-chat-dots"></i>
+                                    <span>Ada Respon</span>
+                                </div>
+                            @endif
+                        </div>
+
+                    </div>
+
+                </a>
+            @endforeach
+        @else
+            <div class="text-center py-5">
+                <i class="bi bi-inbox display-4 text-muted"></i>
+                <p class="mt-3 text-muted">Belum ada pengaduan yang dibuat.</p>
+            </div>
+
+        @endif
+
     </div>
 
-    <a href="{{ route('siswa.dashboard') }}" class="btn btn-secondary mt-3">
-        <i class="bi bi-arrow-left"></i> Kembali
-    </a>
 @endsection

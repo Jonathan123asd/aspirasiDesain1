@@ -31,6 +31,7 @@ Route::middleware(['auth', SiswaMiddleware::class])
         Route::get('/form', [SiswaController::class, 'form'])->name('siswa.form');
         Route::post('/store', [SiswaController::class, 'store'])->name('siswa.store');
         Route::get('/history', [SiswaController::class, 'history'])->name('siswa.history');
+        Route::get('/riwayat/{id}', [SiswaController::class, 'show'])->name('pengaduan.show');
     });
 
 // Admin Routes (KHUSUS ADMIN)

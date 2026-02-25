@@ -14,11 +14,14 @@ class Pengaduan extends Model
 
      protected $fillable = [
         'user_id',
+        'judul',
+        'urgensi',
         'kategori',
         'deskripsi',
         'lokasi',
         'status',
-        'tanggal'
+        'tanggal',
+        'image'
     ];
 
     //pengaduan milik satu user(siswa)

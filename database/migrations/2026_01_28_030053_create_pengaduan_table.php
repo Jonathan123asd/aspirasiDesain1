@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('pengaduan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('judul');
+            $table->enum('urgensi', ['rendah', 'sedang', 'tinggi'])->default('sedang');
             $table->string('kategori');
             $table->text('deskripsi');
             $table->string('lokasi')->nullable();

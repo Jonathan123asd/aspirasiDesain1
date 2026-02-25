@@ -73,22 +73,22 @@
                 $urgensiIcon = '';
 
                 switch ($pengaduan->urgensi) {
-                    case 'Tinggi':
+                    case 'tinggi':
                         $urgensiClass = 'urgensi-tinggi';
                         $urgensiIcon = 'bi-exclamation-triangle-fill';
                         break;
-                    case 'Sedang':
+                    case 'sedang':
                         $urgensiClass = 'urgensi-sedang';
                         $urgensiIcon = 'bi-exclamation-circle-fill';
                         break;
                     default:
                         $urgensiClass = 'urgensi-rendah';
                         $urgensiIcon = 'bi-check-circle-fill';
-                        break;
+                    break;
                 }
             @endphp
 
-            <span class="urgensi-box {{ $urgensiClass }} d-inline-flex align-items-center px-3 py-2">
+            <span class="urgensi-box {{ $urgensiClass }} d-flex px-3 py-2 ">
                 <i class="bi {{ $urgensiIcon }} me-2"></i>
                 {{ $pengaduan->urgensi }}
             </span>

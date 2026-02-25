@@ -24,9 +24,10 @@
 
         /* ===== STATUS BADGE ===== */
         .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 999px;
         }
 
         .badge-pending {
@@ -109,6 +110,184 @@
                 margin-left: 0;
             }
         }
+
+        <style>.form-wrapper {
+            background: #f8f9fa;
+            padding: 35px;
+            border-radius: 20px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 14px;
+            padding: 12px 16px;
+            border: 1px solid #dee2e6;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: none;
+            border-color: #0d6efd;
+        }
+
+        /* ===== URGENCY CARD ===== */
+        .urgency-option {
+            flex: 1;
+            border-radius: 18px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid #e9ecef;
+            transition: 0.2s ease-in-out;
+        }
+
+        .urgency-option input {
+            display: none;
+        }
+
+        .urgency-option.low {
+            border-color: #198754;
+        }
+
+        .urgency-option.medium {
+            border-color: #ffc107;
+        }
+
+        .urgency-option.high {
+            border-color: #dc3545;
+        }
+
+        .urgency-option.active.low {
+            background: rgba(25, 135, 84, 0.08);
+        }
+
+        .urgency-option.active.medium {
+            background: rgba(255, 193, 7, 0.08);
+        }
+
+        .urgency-option.active.high {
+            background: rgba(220, 53, 69, 0.08);
+        }
+
+        .urgensi-box {
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 13px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tinggi */
+        .urgensi-tinggi {
+            background-color: #ffe5e5;
+            color: #d90429;
+            border: 1px solid #ffb3b3;
+        }
+
+        /* Sedang */
+        .urgensi-sedang {
+            background-color: #fff4e5;
+            color: #ff8800;
+            border: 1px solid #ffd8a8;
+        }
+
+        /* Rendah */
+        .urgensi-rendah {
+            background-color: #e6f9f0;
+            color: #0f9d58;
+            border: 1px solid #b7f0d2;
+        }
+
+        /* ===== BUTTON ===== */
+        .btn-submit {
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            color: #fff;
+            border-radius: 14px;
+            padding: 12px 28px;
+            font-weight: 500;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* SEARCH & FILTER */
+        .search-box,
+        .filter-box {
+            border-radius: 20px;
+            padding: 14px 20px;
+            border: 1px solid #dee2e6;
+            background: #fff;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+        }
+
+        .filter-box {
+            cursor: pointer;
+        }
+
+        /* CARD PENGADUAN */
+        .pengaduan-card {
+            border-radius: 24px;
+            padding: 28px;
+            border: 1px solid #f1f1f1;
+            background: #fff;
+            transition: 0.2s ease;
+        }
+
+        .pengaduan-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        /* STATUS BADGE MODERN */
+        .status-pill {
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-proses {
+            border: 2px solid #2563eb;
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.08);
+        }
+
+        .status-selesai {
+            border: 2px solid #16a34a;
+            color: #16a34a;
+            background: rgba(22, 163, 74, 0.08);
+        }
+
+        .status-pending {
+            border: 2px solid #f59e0b;
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .meta-info {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .pengaduan-card {
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .pengaduan-card:hover {
+            transform: translateY(-3px);
+        }
+    </style>
     </style>
 </head>
 

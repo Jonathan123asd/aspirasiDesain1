@@ -95,7 +95,7 @@
                     <h6 class="fw-bold mb-0">{{ $item->judul }}</h6>
 
                     @if ($item->status == 'pending')
-                        <span class="badge rounded-pill bg-warning text-dark px-3 py-2">Menunggu</span>
+                        <span class="badge rounded-pill bg-warning  px-3 py-2">Menunggu</span>
                     @elseif($item->status == 'proses')
                         <span class="badge rounded-pill bg-primary px-3 py-2">Dalam Proses</span>
                     @else

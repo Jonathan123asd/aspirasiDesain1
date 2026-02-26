@@ -3,226 +3,262 @@
 @section('title', 'Dashboard Admin')
 
 @section('content')
-<div class="row mb-4">
-    <div class="col-md-12">
-        <h2><i class="bi bi-speedometer2"></i> Dashboard Admin</h2>
-        <p class="text-muted">Halo, {{ Auth::user()->name }} - Panel Admin Pengaduan Sekolah</p>
-    </div>
-</div>
+    <div class="container-fluid px-4 py-4">
 
-<!-- Statistik -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body text-center">
-                <h5><i class="bi bi-list-check"></i> Total Pengaduan</h5>
-                <h2>{{ $statistik['total'] }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-warning">
-            <div class="card-body text-center">
-                <h5><i class="bi bi-clock"></i> Pending</h5>
-                <h2>{{ $statistik['pending'] }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-info text-white">
-            <div class="card-body text-center">
-                <h5><i class="bi bi-gear"></i> Proses</h5>
-                <h2>{{ $statistik['proses'] }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-success text-white">
-            <div class="card-body text-center">
-                <h5><i class="bi bi-check-circle"></i> Selesai</h5>
-                <h2>{{ $statistik['selesai'] }}</h2>
-            </div>
-        </div>
-    </div>
-</div>
+        <!-- Header Card -->
+        <div class="card border-0 rounded-4 p-4 mb-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-bold mb-1">Dashboard Admin</h2>
+                    <p class="text-muted mb-0">
+                        Kelola dan Pantau Pengaduan Siswa
+                    </p>
+                </div>
 
-<!-- Filter -->
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header bg-secondary text-white">
-                <h5 class="mb-0"><i class="bi bi-filter"></i> Filter Pengaduan</h5>
+                <div class="d-flex align-items-center gap-4">
+                    <div class="text-end">
+                        <h5 class="fw-bold mb-1">{{ Auth::user()->name }}</h5>
+                        <p class="text-muted mb-0">Admin Sekolah</p>
+                    </div>
+
+                    <div class="position-relative">
+                        <a href="#" class="text-dark">
+                            <i class="bi bi-bell fs-4"></i>
+                        </a>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="font-size: 0.6rem;">
+                            0
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <form method="GET" action="{{ route('admin.dashboard') }}">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label">Status</label>
-                            <select name="status" class="form-select">
-                                <option value="">Semua Status</option>
-                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="proses" {{ request('status') == 'proses' ? 'selected' : '' }}>Proses</option>
-                                <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
-                            </select>
+        </div>
+
+
+        <!-- Statistik -->
+        <div class="row g-4 mb-4">
+
+            @php
+                $cards = [
+                    ['title' => 'Total Pengaduan', 'value' => $statistik['total'], 'icon' => 'bi-file-earmark-text'],
+                    ['title' => 'Menunggu', 'value' => $statistik['pending'], 'icon' => 'bi-clock-history'],
+                    ['title' => 'Dalam Proses', 'value' => $statistik['proses'], 'icon' => 'bi-exclamation-triangle'],
+                    ['title' => 'Selesai', 'value' => $statistik['selesai'], 'icon' => 'bi-check-circle'],
+                ];
+            @endphp
+
+            @foreach ($cards as $card)
+                <div class="col-md-3">
+                    <div class="card stat-card border-0 rounded-4 p-4 text-center">
+                        <div class="icon-box mb-3">
+                            <i class="bi {{ $card['icon'] }} fs-3"></i>
                         </div>
+                        <h6 class="text-muted mb-2">{{ $card['title'] }}</h6>
+                        <h2 class="fw-bold mb-0">{{ $card['value'] }}</h2>
+                    </div>
+                </div>
+            @endforeach
 
-                        <div class="col-md-3">
-                            <label class="form-label">Kategori</label>
-                            <select name="kategori" class="form-select">
-                                <option value="">Semua Kategori</option>
-                                @foreach($kategoriList as $kategori)
-                                <option value="{{ $kategori }}" {{ request('kategori') == $kategori ? 'selected' : '' }}>
-                                    {{ $kategori }}
+        </div>
+
+        <div class="card border-0 rounded-4 p-4 bg-light">
+
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0">Daftar Pengaduan</h5>
+                <span class="text-muted small">
+                    Total {{ $pengaduan->total() }} Pengaduan
+                </span>
+            </div>
+
+            <form method="GET" action="{{ route('admin.dashboard') }}">
+
+                <!-- Search & Filter -->
+                <div class="row mb-4 g-3">
+
+                    <!-- Search -->
+                    <div class="col-md-4">
+                        <div class="search-box d-flex align-items-center gap-3">
+                            <i class="bi bi-search text-muted"></i>
+                            <input type="text" name="search" value="{{ request('search') }}"
+                                placeholder="Cari Pengaduan..." class="border-0 bg-transparent w-100"
+                                onkeydown="if(event.key === 'Enter'){ this.form.submit(); }">
+                        </div>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="col-md-4">
+                        <div class="filter-box d-flex align-items-center justify-content-center gap-2 position-relative">
+                            <i class="bi bi-funnel text-muted"></i>
+
+                            <select name="status" class="position-absolute top-0 start-0 w-100 h-100 opacity-0"
+                                onchange="this.form.submit()">
+
+                                <option value="">Semua Status</option>
+                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu
                                 </option>
+                                <option value="proses" {{ request('status') == 'proses' ? 'selected' : '' }}>Dalam Proses
+                                </option>
+                                <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai
+                                </option>
+                            </select>
+
+                            <span>
+                                {{ request('status') ? ucfirst(request('status')) : 'Semua Status' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Kategori Filter (DINAMIS) -->
+                    <div class="col-md-4">
+                        <div class="filter-box d-flex align-items-center justify-content-center gap-2 position-relative">
+                            <i class="bi bi-tag text-muted"></i>
+
+                            <select name="kategori" class="position-absolute top-0 start-0 w-100 h-100 opacity-0"
+                                onchange="this.form.submit()">
+
+                                <option value="">Semua Kategori</option>
+
+                                @foreach ($kategoriList as $kategori)
+                                    <option value="{{ $kategori }}"
+                                        {{ request('kategori') == $kategori ? 'selected' : '' }}>
+                                        {{ $kategori }}
+                                    </option>
                                 @endforeach
                             </select>
-                        </div>
 
-                        <div class="col-md-3">
-                            <label class="form-label">Tanggal</label>
-                            <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}">
-                        </div>
-
-                        <div class="col-md-3 d-flex align-items-end">
-                            <div class="d-grid w-100">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-search"></i> Filter
-                                </button>
-                            </div>
+                            <span>
+                                {{ request('kategori') ?? 'Semua Kategori' }}
+                            </span>
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Tabel Pengaduan -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="bi bi-table"></i> Daftar Pengaduan</h5>
-                <span class="badge bg-light text-dark">Total: {{ $pengaduan->total() }}</span>
-            </div>
-            <div class="card-body">
-                @if($pengaduan->count() > 0)
-                <div class="table-responsive">
-                    <table class="table table-hover table-striped">
-                        <thead class="table-dark">
-                            <tr>
-                                <th width="50">#</th>
-                                <th>Tanggal</th>
-                                <th>Nama Siswa</th>
-                                <th>Kelas</th>
-                                <th>Kategori</th>
-                                <th>Deskripsi</th>
-                                <th>Status</th>
-                                <th width="150">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($pengaduan as $index => $item)
-                            <tr>
-                                <td>{{ $pengaduan->firstItem() + $index }}</td>
-                                <td>{{ date('d/m/Y', strtotime($item->tanggal)) }}</td>
-                                <td>{{ $item->user->name }}</td>
-                                <td>{{ $item->user->kelas }}</td>
-                                <td>{{ $item->kategori }}</td>
-                                <td>
-                                    <small>{{ Str::limit($item->deskripsi, 50) }}</small>
-                                    @if($item->lokasi)
-                                    <br><small class="text-muted"><i class="bi bi-geo-alt"></i> {{ $item->lokasi }}</small>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($item->status == 'pending')
-                                        <span class="badge bg-warning text-dark">Pending</span>
-                                    @elseif($item->status == 'proses')
-                                        <span class="badge bg-info">Proses</span>
-                                    @else
-                                        <span class="badge bg-success">Selesai</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('admin.detail', $item->id) }}" class="btn btn-sm btn-primary" title="Detail">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
+                </div>
+            </form>
 
-                                        <!-- Dropdown untuk ubah status -->
-                                        <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-bs-toggle="dropdown" title="Ubah Status">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <form action="{{ route('admin.status', $item->id) }}" method="POST">
-                                                        @csrf
-                                                        <button type="submit" name="status" value="pending" class="dropdown-item">
-                                                            <i class="bi bi-clock"></i> Set Pending
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                                <li>
-                                                    <form action="{{ route('admin.status', $item->id) }}" method="POST">
-                                                        @csrf
-                                                        <button type="submit" name="status" value="proses" class="dropdown-item">
-                                                            <i class="bi bi-gear"></i> Set Proses
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                                <li>
-                                                    <form action="{{ route('admin.status', $item->id) }}" method="POST">
-                                                        @csrf
-                                                        <button type="submit" name="status" value="selesai" class="dropdown-item">
-                                                            <i class="bi bi-check-circle"></i> Set Selesai
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
+
+            <!-- List Pengaduan -->
+            <div class="table-responsive">
+                <table class="table align-middle custom-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Judul</th>
+                            <th>Siswa</th>
+                            <th>Kategori</th>
+                            <th>Status</th>
+                            <th>Tanggal</th>
+                            <th class="text-end">Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @forelse($pengaduan as $item)
+                            <tr>
+                                <!-- ID -->
+                                <td class="fw-semibold text-primary">
+                                    C{{ str_pad($item->id, 3, '0', STR_PAD_LEFT) }}
+                                </td>
+
+                                <!-- Judul -->
+                                <td>
+                                    <div class="fw-semibold">{{ $item->judul }}</div>
+                                    <div class="text-muted small">
+                                        {{ Str::limit($item->deskripsi, 50) }}
                                     </div>
                                 </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
 
-                <!-- Pagination -->
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <div>
-                        Menampilkan {{ $pengaduan->firstItem() }} sampai {{ $pengaduan->lastItem() }} dari {{ $pengaduan->total() }} data
-                    </div>
-                    <div>
-                        {{ $pengaduan->links() }}
-                    </div>
-                </div>
-                @else
-                <div class="text-center py-5">
-                    <i class="bi bi-inbox display-1 text-muted"></i>
-                    <h4 class="mt-3">Tidak ada pengaduan</h4>
-                    <p class="text-muted">Belum ada pengaduan dari siswa.</p>
-                </div>
-                @endif
+                                <!-- Siswa -->
+                                <td>
+                                    <div class="fw-semibold">{{ $item->user->name }}</div>
+                                    <div class="text-muted small">{{ $item->user->kelas }}</div>
+                                </td>
+
+                                <!-- Kategori -->
+                                <td>{{ $item->kategori }}</td>
+
+                                <!-- Status -->
+                                <td>
+                                    @if ($item->status == 'pending')
+                                        <span class="status-badge pending">
+                                            <i class="bi bi-clock"></i> Pending
+                                        </span>
+                                    @elseif ($item->status == 'proses')
+                                        <span class="status-badge proses">
+                                            <i class="bi bi-exclamation-circle"></i> Dalam Proses
+                                        </span>
+                                    @else
+                                        <span class="status-badge selesai">
+                                            <i class="bi bi-check-circle"></i> Selesai
+                                        </span>
+                                    @endif
+                                </td>
+
+                                <!-- Tanggal -->
+                                <td>
+                                    {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+                                </td>
+
+                                <!-- Aksi -->
+                                <td class="text-end">
+                                    <a href="{{ route('admin.detail', $item->id) }}" class="text-dark">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">
+                                    <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                                    Belum ada pengaduan masuk
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
+
+            <div class="mt-4">
+                {{ $pengaduan->links() }}
+            </div>
+
         </div>
     </div>
-</div>
-@endsection
 
+
+
+
+@endsection
 @section('scripts')
-<script>
-    // Auto close alert setelah 5 detik
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-            let alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                let bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
+    <script>
+        // Auto close alert setelah 5 detik
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                let alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    let bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const searchInput = document.querySelector('input[name="search"]');
+            const form = searchInput.closest('form');
+
+            let typingTimer;
+            const delay = 500; // 500ms setelah berhenti mengetik
+
+            searchInput.addEventListener('keyup', function() {
+                clearTimeout(typingTimer);
+
+                typingTimer = setTimeout(function() {
+                    form.submit();
+                }, delay);
             });
-        }, 5000);
-    });
-</script>
+        });
+    </script>
+
+
 @endsection

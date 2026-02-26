@@ -38,6 +38,22 @@
                 </a>
             </li>
 
+            {{-- <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/detail') ? 'active' : '' }}"
+                    href="{{ route('admin.detail') }}">
+                    <i class="bi bi-speedometer2 me-2"></i> Kelola Pengaduan
+                </a>
+            </li>
+ --}}
+
+            {{-- <li class="nav-item">
+                <a class="nav-link
+        {{ request()->routeIs('admin.dashboard') || request()->routeIs('admin.detail') ? 'active' : '' }}"
+                    href="{{ route('admin.dashboard') }}">
+                    <i class="bi bi-folder2-open me-2"></i> Kelola Pengaduan
+                </a>
+            </li> --}}
+
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ request()->is('admin/users*') ? 'active' : '' }}"
                     href="{{ route('admin.users.index') }}">

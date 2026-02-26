@@ -16,25 +16,42 @@ class AdminController extends Controller
     // Dashboard admin
     public function dashboard(Request $request)
     {
-        // Ambil filter dari request
-        $filters = $request->only(['status', 'kategori', 'tanggal']);
+        // Ambil filter dari request (tambahkan search)
+        $filters = $request->only(['search', 'status', 'kategori', 'tanggal']);
 
-        // Query dengan filter
         $query = Pengaduan::with('user');
 
+        // 🔎 SEARCH
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($user) use ($search) {
+                        $user->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // 🎯 STATUS
         if (!empty($filters['status'])) {
             $query->where('status', $filters['status']);
         }
 
+        // 🏷 KATEGORI
         if (!empty($filters['kategori'])) {
             $query->where('kategori', $filters['kategori']);
         }
 
+        // 📅 TANGGAL
         if (!empty($filters['tanggal'])) {
             $query->whereDate('tanggal', $filters['tanggal']);
         }
 
-        $pengaduan = $query->orderBy('created_at', 'desc')->paginate(10);
+        $pengaduan = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString(); // penting agar pagination tidak reset filter
 
         // Statistik
         $statistik = [
@@ -44,12 +61,12 @@ class AdminController extends Controller
             'selesai' => Pengaduan::where('status', 'selesai')->count(),
         ];
 
-        // List kategori untuk filter
-        $kategoriList = Pengaduan::select('kategori')->distinct()->pluck('kategori');
+        $kategoriList = Pengaduan::select('kategori')
+            ->distinct()
+            ->pluck('kategori');
 
         return view('admin.dashboard', compact('pengaduan', 'statistik', 'kategoriList'));
     }
-
     // Detail pengaduan
     public function detail($id)
     {

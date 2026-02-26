@@ -294,6 +294,85 @@
         .pengaduan-card:hover {
             transform: translateY(-3px);
         }
+
+        /*admin dashboard*/
+
+        body {
+            background: #f5f7fb;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            transition: 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            background: #eef2ff;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+        }
+
+        .complaint-card {
+            background: #ffffff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+            transition: 0.3s ease;
+        }
+
+        .complaint-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .custom-table thead th {
+            border-bottom: none;
+            font-weight: 600;
+            color: #6c757d;
+        }
+
+        .custom-table tbody tr {
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .custom-table tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-badge.pending {
+            border: 1px solid #ffc107;
+            color: #ffc107;
+            background: #fff9e6;
+        }
+
+        .status-badge.proses {
+            border: 1px solid #0d6efd;
+            color: #0d6efd;
+            background: #e7f1ff;
+        }
+
+        .status-badge.selesai {
+            border: 1px solid #198754;
+            color: #198754;
+            background: #e9f7ef;
+        }
     </style>
     </style>
 </head>

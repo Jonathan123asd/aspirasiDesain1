@@ -29,6 +29,7 @@
     <ul class="nav flex-column px-3 mt-3 mb-5">
 
         {{-- ADMIN --}}
+        {{-- ================= ADMIN MENU ================= --}}
         @if (Auth::user()->role == 'admin')
 
             <li class="nav-item">
@@ -38,21 +39,12 @@
                 </a>
             </li>
 
-            {{-- <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/detail') ? 'active' : '' }}"
-                    href="{{ route('admin.detail') }}">
-                    <i class="bi bi-speedometer2 me-2"></i> Kelola Pengaduan
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/pengaduan*') ? 'active' : '' }}"
+                    href="{{ route('admin.pengaduan.index') }}">
+                    <i class="bi bi-file-earmark-text me-2"></i> Kelola Pengaduan
                 </a>
             </li>
- --}}
-
-            {{-- <li class="nav-item">
-                <a class="nav-link
-        {{ request()->routeIs('admin.dashboard') || request()->routeIs('admin.detail') ? 'active' : '' }}"
-                    href="{{ route('admin.dashboard') }}">
-                    <i class="bi bi-folder2-open me-2"></i> Kelola Pengaduan
-                </a>
-            </li> --}}
 
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ request()->is('admin/users*') ? 'active' : '' }}"
@@ -75,7 +67,6 @@
             </li>
 
         @endif
-
 
         {{-- SISWA --}}
         @if (Auth::user()->role == 'siswa')

@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function home ()
+    {
+        return view('layouts.home');
+    }
     // Tampilkan halaman login
     public function showLogin()
     {

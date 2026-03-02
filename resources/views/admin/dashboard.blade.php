@@ -138,8 +138,8 @@
 
 
             <!-- List Pengaduan -->
-            <div class="table-responsive">
-                <table class="table align-middle custom-table mb-0">
+            <div class="table-responsive px-2">
+                <table class="table align-middle custom-table mb-0 rounded-3 overflow-hidden">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -161,10 +161,10 @@
                                 </td>
 
                                 <!-- Judul -->
-                                <td>
+                                <td class="judul-col">
                                     <div class="fw-semibold">{{ $item->judul }}</div>
                                     <div class="text-muted small">
-                                        {{ Str::limit($item->deskripsi, 50) }}
+                                        {{($item->deskripsi) }}
                                     </div>
                                 </td>
 

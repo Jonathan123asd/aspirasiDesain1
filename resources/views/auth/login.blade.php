@@ -20,23 +20,6 @@
 
             <h4 class="text-start fw-bold mb-3">Masuk ke Akun</h4>
 
-            <!-- Role Selector -->
-            <div class="d-flex gap-3 mb-4">
-                <input type="radio" class="btn-check" name="role" id="siswa" value="siswa" checked>
-                <label class="btn btn-outline-primary w-100 rounded-3 py-3 d-flex flex-column align-items-center"
-                    for="siswa">
-                    <i class="bi bi-mortarboard-fill fs-4 mb-2"></i>
-                    Siswa
-                </label>
-
-                <input type="radio" class="btn-check" name="role" id="admin" value="admin">
-                <label class="btn btn-outline-secondary w-100 rounded-3 py-3 d-flex flex-column align-items-center"
-                    for="admin">
-                    <i class="bi bi-shield-lock-fill fs-4 mb-2"></i>
-                    Admin
-                </label>
-            </div>
-
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <input type="hidden" name="role" id="selected_role" value="siswa">

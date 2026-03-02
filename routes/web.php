@@ -9,18 +9,20 @@ use App\Http\Middleware\SiswaMiddleware;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 
-// Halaman utama
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// // Halaman utama
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
+
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/', [AuthController::class, 'home'])->name('home');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
- Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register.form');
-        Route::post('/register', [RegisterController::class, 'register'])->name('register');
-        Route::get('/register/success', [RegisterController::class, 'showSuccessPage'])->name('register.success');
+Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register.form');
+Route::post('/register', [RegisterController::class, 'register'])->name('register');
+Route::get('/register/success', [RegisterController::class, 'showSuccessPage'])->name('register.success');
 
 
 // Siswa Routes (KHUSUS SISWA)
@@ -40,9 +42,10 @@ Route::middleware(['auth', AdminMiddleware::class])
     ->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/pengaduan/{id}', [AdminController::class, 'detail'])->name('admin.detail');
+        Route::get('/pengaduan', [AdminController::class, 'dashboard'])->name('admin.pengaduan.index');
         Route::post('/status/{id}', [AdminController::class, 'updateStatus'])->name('admin.status');
         Route::post('/respon', [AdminController::class, 'storeRespon'])->name('admin.respon');
-         // User management
+        // User management
         Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
         Route::get('/users/pending', [UserController::class, 'pending'])->name('admin.users.pending');
         Route::post('/users/{user}/approve', [UserController::class, 'approve'])->name('admin.users.approve');

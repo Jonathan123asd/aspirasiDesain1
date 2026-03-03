@@ -33,8 +33,7 @@
                 </div>
             </div>
         </div>
-
-
+        
         <!-- Statistik -->
         <div class="row g-4 mb-4">
 
@@ -75,7 +74,6 @@
 
                 <!-- Search & Filter -->
                 <div class="row mb-4 g-3">
-
                     <!-- Search -->
                     <div class="col-md-4">
                         <div class="search-box d-flex align-items-center gap-3">

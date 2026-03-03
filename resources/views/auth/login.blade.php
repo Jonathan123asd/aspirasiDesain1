@@ -1,32 +1,88 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="id">
 
-@section('title', 'Login')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
 
-@section('content')
-    <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-start pt-4 px-3">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <div class="card shadow border-0 rounded-4 px-5 py-2" style="max-width: 460px; width:100%;">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-            <!-- Header -->
-            <div class="text-start">
-                <img src="{{ asset('images/Logo.png') }}" style="max-height: 55px;" class="img-fluid mb-2">
+    <style>
+        html,
+        body {
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top right, rgba(255, 255, 255, 0.25), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.15), transparent 40%),
+                linear-gradient(135deg, #0d6efd, #4f8dfd);
+        }
+
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            max-width: 460px;
+            width: 100%;
+            border-radius: 20px;
+        }
+
+        .custom-input {
+            border: 1px solid #dee2e6;
+            padding: 4px 10px;
+            transition: all 0.3s ease;
+            background: #fff;
+            border-radius: 50px;
+        }
+
+        .custom-input:focus-within {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+        }
+
+        .custom-input input:focus {
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-wrapper">
+        <div class="card shadow border-0 login-card px-5 py-4">
+
+            <!-- Logo -->
+            <div class="text-start mb-2">
+                <img src="{{ asset('images/Logo.png') }}" style="max-height: 55px;" class="img-fluid">
             </div>
 
-            <div class="text-start">
-                <small class="text-black d-block fw-medium">
-                    Sistem Informasi Pengaduan & Respon Aspirasi Sekolah
-                </small>
-            </div>
+            <small class="text-dark d-block fw-medium mb-2">
+                Sistem Informasi Pengaduan & Respon Aspirasi Sekolah
+            </small>
 
-            <h4 class="text-start fw-bold mb-3">Masuk ke Akun</h4>
+            <h4 class="fw-bold mb-4">Masuk ke Akun</h4>
 
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <input type="hidden" name="role" id="selected_role" value="siswa">
 
+                <!-- Email -->
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <div class="input-group rounded-pill custom-input">
+                    <div class="input-group custom-input">
                         <span class="input-group-text bg-white border-0 rounded-start-pill">
                             <i class="bi bi-envelope-fill text-muted"></i>
                         </span>
@@ -43,7 +99,7 @@
                 <!-- Password -->
                 <div class="mb-4">
                     <label class="form-label">Password</label>
-                    <div class="input-group rounded-pill custom-input">
+                    <div class="input-group custom-input">
                         <span class="input-group-text bg-white border-0 rounded-start-pill">
                             <i class="bi bi-lock-fill text-muted"></i>
                         </span>
@@ -52,8 +108,8 @@
                             class="form-control border-0 @error('password') is-invalid @enderror"
                             placeholder="Masukkan password" required>
 
-                        <span class="input-group-text bg-white border-0 rounded-end-pill toggle-password"
-                            style="cursor:pointer;">
+                        <span class="input-group-text bg-white border-0 rounded-end-pill"
+                            style="cursor:pointer;" id="togglePassword">
                             <i class="bi bi-eye-fill text-muted" id="toggleIcon"></i>
                         </span>
                     </div>
@@ -67,7 +123,7 @@
                 </button>
             </form>
 
-            <div class="text-center mt-4 mb-4">
+            <div class="text-center mt-4">
                 <small class="text-muted">Belum Punya Akun?</small>
                 <a href="{{ route('register.form') }}" class="fw-semibold text-primary text-decoration-none">
                     Daftar Sebagai Siswa
@@ -77,18 +133,13 @@
         </div>
     </div>
 
-    <script>
-        document.querySelectorAll('.btn-check').forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.checked) {
-                    document.getElementById('selected_role').value = this.value;
-                }
-            });
-        });
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-        document.getElementById('toggleIcon').addEventListener('click', function() {
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function() {
             const password = document.getElementById('password');
-            const icon = this;
+            const icon = document.getElementById('toggleIcon');
 
             if (password.type === "password") {
                 password.type = "text";
@@ -102,34 +153,5 @@
         });
     </script>
 
-    <style>
-        html,
-        body {
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        body {
-            background:
-                radial-gradient(circle at top right, rgba(255, 255, 255, 0.25), transparent 40%),
-                radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.15), transparent 40%),
-                linear-gradient(135deg, #0d6efd, #4f8dfd);
-        }
-
-        .custom-input {
-            border: 1px solid #dee2e6;
-            padding: 4px 10px;
-            transition: all 0.3s ease;
-            background: #fff;
-        }
-
-        .custom-input:focus-within {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
-        }
-
-        .custom-input input:focus {
-            box-shadow: none;
-        }
-    </style>
-@endsection
+</body>
+</html>

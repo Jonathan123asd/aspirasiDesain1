@@ -3,127 +3,100 @@
 @section('title', 'Manajemen User')
 
 @section('content')
-    <div class="container-fluid px-4 admin-users-page">
+    <div class="container-fluid px-4 py-4">
         <!-- Header Section -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h1 class="display-6 fw-bold" style="color: var(--dark-gray);">Manajemen User</h1>
-                        <p class="text-muted fs-5">Kelola data siswa dan admin</p>
-                    </div>
-                    <div>
-                        @if ($pendingCount > 0)
-                            <a href="{{ route('admin.users.pending') }}" class="btn btn-pending">
-                                <i class="bi bi-person-check me-2"></i>
-                                Pending Approval
-                                <span class="badge bg-white text-dark ms-2">{{ $pendingCount }}</span>
-                            </a>
-                        @endif
-                    </div>
+        <div class="card border-0 rounded-4 p-4 mb-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="fw-bold" style="color: var(--dark-gray);">Manajemen User</h1>
+                    <p class="text-muted mb-0">Kelola data siswa dan admin</p>
                 </div>
             </div>
         </div>
 
         <!-- Stats Cards -->
         <div class="row g-4 mb-4">
-            <div class="col-md-4">
-                <div class="stats-card">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="stats-label">Total User</p>
-                            <h3 class="stats-number">{{ $users->total() }}</h3>
-                            <small class="text-success">
-                                <i class="bi bi-arrow-up"></i> +12% bulan ini
-                            </small>
+
+            @php
+                $userCards = [
+                    [
+                        'title' => 'Total User',
+                        'value' => $users->total(),
+                        'icon' => 'bi-people',
+                        'color' => 'primary',
+                    ],
+                    [
+                        'title' => 'Pending Approval',
+                        'value' => $pendingCount,
+                        'icon' => 'bi-hourglass-split',
+                        'color' => 'warning',
+                    ],
+                    [
+                        'title' => 'Siswa Aktif',
+                        'value' => $users->where('role', 'siswa')->where('status', 'approved')->count(),
+                        'icon' => 'bi-mortarboard',
+                        'color' => 'success',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($userCards as $card)
+                <div class="col-md-4">
+                    <div class="card stat-card border-0 rounded-4 p-4 text-center shadow-sm">
+                        <div class="icon-box mb-3 bg-{{ $card['color'] }} bg-opacity-10 text-{{ $card['color'] }} rounded-circle d-inline-flex align-items-center justify-content-center"
+                            style="width:60px;height:60px;">
+                            <i class="bi {{ $card['icon'] }} fs-4"></i>
                         </div>
-                        <div class="stats-icon stats-icon-blue">
-                            <i class="bi bi-people fs-3"></i>
-                        </div>
+                        <h6 class="text-muted mb-2">{{ $card['title'] }}</h6>
+                        <h2 class="fw-bold mb-0">{{ $card['value'] }}</h2>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="stats-card">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="stats-label">Pending Approval</p>
-                            <h3 class="stats-number" style="color: #F59E0B;">{{ $pendingCount }}</h3>
-                            <small class="text-warning">
-                                <i class="bi bi-clock"></i> Perlu direview
-                            </small>
-                        </div>
-                        <div class="stats-icon stats-icon-yellow">
-                            <i class="bi bi-hourglass-split fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="stats-card">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="stats-label">Siswa Aktif</p>
-                            <h3 class="stats-number" style="color: #10B981;">
-                                {{ $users->where('role', 'siswa')->where('status', 'approved')->count() }}</h3>
-                            <small class="text-success">
-                                <i class="bi bi-check-circle"></i> Approved
-                            </small>
-                        </div>
-                        <div class="stats-icon stats-icon-green">
-                            <i class="bi bi-mortarboard fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            @endforeach
 
         </div>
 
-        <!-- Filter Section -->
-        <div class="filter-section">
-            <div class="row g-3">
-                <div class="col-md-6 search-box">
-                    <div class="">
-                        <i class="bi bi-search"></i>
-                        <input type="text" class="form-control" id="searchUser"
-                            placeholder="Cari nama, email, atau kelas..." onkeyup="filterTable()">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-select filter-select" id="roleFilter" onchange="filterTable()">
-                        <option value="all">Semua Role</option>
-                        <option value="siswa">Siswa</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-select filter-select" id="statusFilter" onchange="filterTable()">
-                        <option value="all">Semua Status</option>
-                        <option value="approved">Approved</option>
-                        <option value="pending">Pending</option>
-                        <option value="rejected">Rejected</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Users Table Card -->
-        <div class="card-custom">
-            <div class="card-header-custom">
+        <!-- Filter Section -->
+
+        <div class="row mb-4 g-3">
+            <div class="col-md-6">
+                <div class="search-box d-flex align-items-center gap-3">
+                    <i class="bi bi-search text-muted"></i>
+                    <input type="text" class="form-control" id="searchUser" placeholder="Cari nama, email, atau kelas..."
+                        class="border-0 bg-transparent w-100" onkeyup="filterTable()">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select filter-select" id="roleFilter" onchange="filterTable()">
+                    <option value="all">Semua Role</option>
+                    <option value="siswa">Siswa</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select filter-select" id="statusFilter" onchange="filterTable()">
+                    <option value="all">Semua Status</option>
+                    <option value="approved">Approved</option>
+                    <option value="pending">Pending</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+        </div>
+        <div class="card border-0 rounded-4 p-4 bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-4">
                 <h5><i class="bi bi-list me-2" style="color: var(--primary-blue);"></i> Daftar Semua User</h5>
                 <p>Total {{ $users->total() }} user terdaftar dalam sistem</p>
             </div>
 
             <div class="card-body p-0">
                 @if ($users->count() > 0)
-                    <div class="table-responsive">
-                        <table class="table-custom" id="usersTable">
+                    <div class="table-responsive px-2">
+                        <table class="table align-middle custom-table mb-0 rounded-3 overflow-hidden" id="usersTable">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th>No</th>
                                     <th>Nama</th>
                                     <th>Email</th>
                                     <th>Kelas</th>
@@ -244,17 +217,20 @@
                 @endif
             </div>
         </div>
+
+    </div>
     </div>
 
     <!-- Detail Modal -->
     <div class="modal fade" id="userDetailModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 20px;">
-                <div class="modal-header border-0 p-4">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-0 p-4 pb-0">
                     <h5 class="modal-title fw-bold">Detail User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-4 pt-0" id="userDetailContent">
+
+                <div class="modal-body p-4 pt-3" id="userDetailContent">
                     <!-- Dynamic content -->
                 </div>
             </div>

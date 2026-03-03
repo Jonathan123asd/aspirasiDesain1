@@ -29,7 +29,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // ADMIN TIDAK PERLU APPROVAL, LANGSUNG BISA LOGIN
-            if ($user->role === 'admin') {
+            if ($user->role ===  'admin') {
                 $request->session()->regenerate();
                 return redirect()->route('admin.dashboard');
             }

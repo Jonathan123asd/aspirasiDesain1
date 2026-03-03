@@ -57,4 +57,6 @@ class UserController extends Controller
 
         return view('admin.users.index', compact('users', 'pendingCount'));
     }
+
+    
 }

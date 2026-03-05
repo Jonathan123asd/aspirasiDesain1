@@ -16,7 +16,7 @@ class Pengaduan extends Model
         'user_id',
         'judul',
         'urgensi',
-        'kategori',
+        'kategori_id',
         'deskripsi',
         'lokasi',
         'status',
@@ -34,5 +34,10 @@ class Pengaduan extends Model
     public function respon()
     {
         return $this->hasMany(Respon::class, 'pengaduan_id');
+    }
+
+    public function kategori()
+    {
+        return $this->belongsTo(kategori::class, 'kategori_id');
     }
 }

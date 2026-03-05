@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Statistik -->
         <div class="row g-4 mb-4">
 
@@ -173,7 +173,7 @@
                                 </td>
 
                                 <!-- Kategori -->
-                                <td>{{ $item->kategori }}</td>
+                                <td>{{ $item->kategori->nama_kategori  ?? '-'}}</td>
 
                                 <!-- Status -->
                                 <td>

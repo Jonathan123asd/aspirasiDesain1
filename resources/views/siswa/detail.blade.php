@@ -38,7 +38,7 @@
 
             {{-- META --}}
             <div class="d-flex gap-4 text-muted mb-4">
-                <span><i class="bi bi-tag"></i> {{ $pengaduan->kategori }}</span>
+                <span><i class="bi bi-tag"></i> {{ $pengaduan->kategori->nama_kategori ?? '-' }}</span>
                 <span><i class="bi bi-geo-alt"></i> {{ $pengaduan->lokasi }}</span>
                 <span><i class="bi bi-calendar"></i>
                     {{ date('d/m/Y', strtotime($pengaduan->tanggal)) }}

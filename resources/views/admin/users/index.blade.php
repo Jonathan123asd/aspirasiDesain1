@@ -190,7 +190,11 @@
                                                     </form>
                                                 </div>
                                             @elseif($user->role == 'siswa')
-                                                <button class="btn-detail" onclick="showUserDetail({{ $user->id }})">
+                                                <button class="btn-detail" data-bs-toggle="modal"
+                                                    data-bs-target="#userDetailModal" data-name="{{ $user->name }}"
+                                                    data-email="{{ $user->email }}" data-kelas="{{ $user->kelas }}"
+                                                    data-role="{{ $user->role }}" data-status="{{ $user->status }}"
+                                                    data-created="{{ $user->created_at->format('d/m/Y') }}">
                                                     <i class="bi bi-eye me-1"></i>
                                                     Detail
                                                 </button>
@@ -237,3 +241,55 @@
         </div>
     </div>
 @endsection
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const userDetailModal = document.getElementById('userDetailModal');
+
+    userDetailModal.addEventListener('show.bs.modal', function (event) {
+
+        const button = event.relatedTarget;
+
+        const name = button.getAttribute('data-name');
+        const email = button.getAttribute('data-email');
+        const kelas = button.getAttribute('data-kelas') || '-';
+        const role = button.getAttribute('data-role');
+        const status = button.getAttribute('data-status');
+        const created = button.getAttribute('data-created');
+
+        const modalBody = document.getElementById('userDetailContent');
+
+        modalBody.innerHTML = `
+            <div class="mb-3">
+                <strong>Nama:</strong>
+                <p class="mb-1">${name}</p>
+            </div>
+
+            <div class="mb-3">
+                <strong>Email:</strong>
+                <p class="mb-1">${email}</p>
+            </div>
+
+            <div class="mb-3">
+                <strong>Kelas:</strong>
+                <p class="mb-1">${kelas}</p>
+            </div>
+
+            <div class="mb-3">
+                <strong>Role:</strong>
+                <p class="mb-1 text-capitalize">${role}</p>
+            </div>
+
+            <div class="mb-3">
+                <strong>Status:</strong>
+                <p class="mb-1 text-capitalize">${status}</p>
+            </div>
+
+            <div>
+                <strong>Tanggal Daftar:</strong>
+                <p class="mb-1">${created}</p>
+            </div>
+        `;
+    });
+});
+</script>

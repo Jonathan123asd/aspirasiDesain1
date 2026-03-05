@@ -42,14 +42,27 @@
                 {{-- Kategori & Lokasi --}}
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <label class="form-label">Kategori</label>
-                        <select name="kategori" class="form-select" required>
-                            <option disabled selected>Pilih Kategori</option>
-                            <option value="Sarana">Sarana</option>
-                            <option value="Prasarana">Prasarana</option>
-                            <option value="Lingkungan">Lingkungan</option>
-                            <option value="Lainnya">Lainnya</option>
+                        <label class="form-label fw-semibold">Kategori</label>
+
+                        <select name="kategori_id" class="form-select @error('kategori_id') is-invalid @enderror" required>
+
+                            <option value="" disabled {{ old('kategori_id') ? '' : 'selected' }}>
+                                Pilih Kategori
+                            </option>
+
+                            @foreach ($kategori as $item)
+                                <option value="{{ $item->id }}" {{ old('kategori_id') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->nama_kategori }}
+                                </option>
+                            @endforeach
+
                         </select>
+
+                        @error('kategori_id')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
 
                     <div class="col-md-6">

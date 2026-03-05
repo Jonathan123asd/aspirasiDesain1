@@ -62,7 +62,7 @@
                             <span>Kategori</span>
                         </div>
                         <div class="fw-semibold ps-4">
-                            {{ $pengaduan->kategori }}
+                            {{ $pengaduan->kategori->nama_kategori ?? '-' }}
                         </div>
                     </div>
 

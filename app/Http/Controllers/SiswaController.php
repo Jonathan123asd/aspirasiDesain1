@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\kategori;
 use App\Models\Pengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,8 @@ class SiswaController extends Controller
     // Form pengaduan
     public function form()
     {
-        return view('siswa.form');
+        $kategori = Kategori::all();
+        return view('siswa.form', compact('kategori'));
     }
 
     // Simpan pengaduan
@@ -48,9 +50,9 @@ class SiswaController extends Controller
         // Validasi
         $request->validate([
             'judul' => 'required|string|max:100',
-            'kategori' => 'required|string|max:50',
             'deskripsi' => 'required|string|min:10',
             'lokasi' => 'nullable|string|max:100',
+            'kategori_id' => 'required|exists:kategori,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'urgensi' => 'required|in:rendah,sedang,tinggi'
         ]);
@@ -68,7 +70,7 @@ class SiswaController extends Controller
             'user_id' => Auth::id(),
             'judul' => $request->judul,
             'urgensi' => $request->urgensi,
-            'kategori' => $request->kategori,
+            'kategori_id' => $request->kategori_id,
             'deskripsi' => $request->deskripsi,
             'lokasi' => $request->lokasi,
             'image' => $imagePath,
@@ -107,7 +109,7 @@ class SiswaController extends Controller
 
         return view('siswa.history', compact('pengaduan'));
     }
-    
+
     public function show($id)
     {
         $pengaduan = Pengaduan::with(['respon.admin'])

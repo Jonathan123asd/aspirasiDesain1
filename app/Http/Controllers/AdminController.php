@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\kategori;
 use App\Models\Pengaduan;
 use App\Models\User;
 use App\Models\Respon;
@@ -19,7 +20,7 @@ class AdminController extends Controller
         // Ambil filter dari request (tambahkan search)
         $filters = $request->only(['search', 'status', 'kategori', 'tanggal']);
 
-        $query = Pengaduan::with('user');
+        $query = Pengaduan::with('user', 'kategori');
 
         // 🔎 SEARCH
         if (!empty($filters['search'])) {
@@ -41,7 +42,7 @@ class AdminController extends Controller
 
         // 🏷 KATEGORI
         if (!empty($filters['kategori'])) {
-            $query->where('kategori', $filters['kategori']);
+            $query->where('kategori_id', $filters['kategori']);
         }
 
         // 📅 TANGGAL
@@ -61,18 +62,16 @@ class AdminController extends Controller
             'selesai' => Pengaduan::where('status', 'selesai')->count(),
         ];
 
-        $kategoriList = Pengaduan::select('kategori')
-            ->distinct()
-            ->pluck('kategori');
+        $kategoriList = kategori::all();
 
         return view('admin.dashboard', compact('pengaduan', 'statistik', 'kategoriList'));
     }
     // Detail pengaduan
     public function detail($id)
     {
-        $pengaduan = Pengaduan::with(['user', 'respon.admin'])->findOrFail($id);
+        $pengaduan = Pengaduan::with(['user', 'respon.admin','kategori'])->findOrFail($id);
 
-        return view('admin.detail', compact('pengaduan'));
+        return view('admin.detail', compact('pengaduan', ));
     }
 
     // Update status pengaduan
@@ -103,7 +102,7 @@ class AdminController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.detail', $request->pengaduan_id)
+            ->route('admin.dashboard', $request->pengaduan_id)
             ->with('success', 'Respon berhasil ditambahkan!');
     }
 }

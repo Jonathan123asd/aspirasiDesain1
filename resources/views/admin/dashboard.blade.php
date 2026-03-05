@@ -118,13 +118,13 @@
                                 <option value="">Semua Kategori</option>
 
                                 @foreach ($kategoriList as $kategori)
-                                    <option value="{{ $kategori }}"
-                                        {{ request('kategori') == $kategori ? 'selected' : '' }}>
-                                        {{ $kategori }}
+                                    <option value="{{ $kategori->id }}"
+                                        {{ request('kategori') == $kategori->id ? 'selected' : '' }}>
+                                        {{ $kategori->nama_kategori }}
                                     </option>
                                 @endforeach
-                            </select>
 
+                            </select>
                             <span>
                                 {{ request('kategori') ?? 'Semua Kategori' }}
                             </span>
@@ -162,7 +162,7 @@
                                 <td class="judul-col">
                                     <div class="fw-semibold">{{ $item->judul }}</div>
                                     <div class="text-muted small">
-                                        {{($item->deskripsi) }}
+                                        {{ $item->deskripsi }}
                                     </div>
                                 </td>
 
@@ -173,7 +173,7 @@
                                 </td>
 
                                 <!-- Kategori -->
-                                <td>{{ $item->kategori->nama_kategori  ?? '-'}}</td>
+                                <td>{{ $item->kategori->nama_kategori ?? '-' }}</td>
 
                                 <!-- Status -->
                                 <td>

@@ -663,7 +663,7 @@
             </div>
 
             <div class="border-top border-secondary pt-4 text-center text-secondary">
-                <p class="mb-0">&copy; 2024 Sipra. Semua hak dilindungi.</p>
+                <p class="mb-0">&copy; 2026 Sipra. Semua hak dilindungi.</p>
             </div>
         </div>
     </footer>

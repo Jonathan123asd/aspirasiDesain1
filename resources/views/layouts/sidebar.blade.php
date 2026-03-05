@@ -40,13 +40,6 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/pengaduan*') ? 'active' : '' }}"
-                    href="{{ route('admin.pengaduan.index') }}">
-                    <i class="bi bi-file-earmark-text me-2"></i> Kelola Pengaduan
-                </a>
-            </li>
-
-            <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/kategori*') ? 'active' : '' }}"
                     href="{{ route('admin.kategori.index') }}">
                     <i class="bi bi-tags me-2"></i> Kelola Kategori

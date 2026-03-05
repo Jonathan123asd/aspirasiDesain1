@@ -8,11 +8,8 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\SiswaMiddleware;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\KategoriController;
 
-// // Halaman utama
-// Route::get('/', function () {
-//     return redirect()->route('login');
-// });
 
 
 // Auth Routes
@@ -50,4 +47,13 @@ Route::middleware(['auth', AdminMiddleware::class])
         Route::get('/users/pending', [UserController::class, 'pending'])->name('admin.users.pending');
         Route::post('/users/{user}/approve', [UserController::class, 'approve'])->name('admin.users.approve');
         Route::post('/users/{user}/reject', [UserController::class, 'reject'])->name('admin.users.reject');
+        // Kategori management
+        Route::get('/kategori', [KategoriController::class, 'index'])->name('admin.kategori.index');
+        Route::get('/kategori/create', [KategoriController::class, 'create'])->name('admin.kategori.create');
+        Route::post('/kategori', [KategoriController::class, 'store'])->name('admin.kategori.store');
+        Route::delete('/kategori/{kategori}', [KategoriController::class, 'destroy'])->name('admin.kategori.destroy');
+        Route::get('/kategori/{kategori}/edit', [KategoriController::class, 'edit'])->name('admin.kategori.edit');
+        Route::put('/kategori/{kategori}', [KategoriController::class, 'update'])->name('admin.kategori.update');
+        Route::get('/kategori/{kategori}', [KategoriController::class, 'show'])->name('admin.kategori.detail');
+
     });

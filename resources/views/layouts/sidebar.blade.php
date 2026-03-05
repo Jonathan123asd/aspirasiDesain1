@@ -47,6 +47,13 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/kategori*') ? 'active' : '' }}"
+                    href="{{ route('admin.kategori.index') }}">
+                    <i class="bi bi-tags me-2"></i> Kelola Kategori
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ request()->is('admin/users*') ? 'active' : '' }}"
                     href="{{ route('admin.users.index') }}">
 
@@ -65,6 +72,8 @@
                     @endif
                 </a>
             </li>
+
+
 
         @endif
 

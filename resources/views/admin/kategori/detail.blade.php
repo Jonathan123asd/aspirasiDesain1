@@ -42,7 +42,7 @@
                 <div class="col-md-6">
                     <label class="form-label text-muted small">ID Kategori</label>
                     <div class="fw-semibold fs-5 text-primary">
-                        K{{ str_pad($kategori->id, 3, '0', STR_PAD_LEFT) }}
+                        C{{ str_pad($kategori->id, 3, '0', STR_PAD_LEFT) }}
                     </div>
                 </div>
 

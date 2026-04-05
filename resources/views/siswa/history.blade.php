@@ -82,7 +82,7 @@
                         <div class="d-flex flex-wrap gap-4 meta-info">
                             <div class="d-flex align-items-center gap-2">
                                 <i class="bi bi-tag"></i>
-                                <span>{{ $item->kategori }}</span>
+                                <span>{{ $item->kategori->nama_kategori ?? 'Tidak tersedia' }}</span>
                             </div>
 
                             <div class="d-flex align-items-center gap-2">

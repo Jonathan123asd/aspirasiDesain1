@@ -657,7 +657,7 @@
                     <ul class="list-unstyled text-secondary">
                         <li class="mb-2">Email: info@Sipra.id</li>
                         <li class="mb-2">Telp: (021) 123-4567</li>
-                        <li class="mb-2">Alamat: Jakarta, Indonesia</li>
+                        <li class="mb-2">Alamat: Tangerang, Indonesia</li>
                     </ul>
                 </div>
             </div>

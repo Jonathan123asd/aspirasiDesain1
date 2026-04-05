@@ -1,15 +1,23 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\kategori;
 
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kategori = kategori::latest()->paginate(10);
+        $query = Kategori::query();
+
+        if ($request->search) {
+            $query->where('nama_kategori', 'like', '%' . $request->search . '%');
+        }
+
+        $kategori = $query->latest()->paginate(10);
+
         return view('admin.kategori.index', compact('kategori'));
     }
 
@@ -49,8 +57,16 @@ class KategoriController extends Controller
 
     public function destroy(kategori $kategori)
     {
-        $kategori->delete();
-        return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil dihapus!');
+        // cek apakah kategori dipakai pengaduan
+    if ($kategori->pengaduan()->count() > 0) {
+        return redirect()->route('admin.kategori.index')
+            ->with('error', 'Kategori tidak bisa dihapus karena sedang digunakan!');
+    }
+
+    $kategori->delete();
+
+    return redirect()->route('admin.kategori.index')
+        ->with('success', 'Kategori berhasil dihapus!');
     }
 
     public function show(kategori $kategori)

@@ -102,7 +102,15 @@
                             </select>
 
                             <span>
-                                {{ request('status') ? ucfirst(request('status')) : 'Semua Status' }}
+                                @if (request('status') == 'pending')
+                                    Menunggu
+                                @elseif(request('status') == 'proses')
+                                    Dalam Proses
+                                @elseif(request('status') == 'selesai')
+                                    Selesai
+                                @else
+                                    Semua Status
+                                @endif
                             </span>
                         </div>
                     </div>
@@ -126,7 +134,11 @@
 
                             </select>
                             <span>
-                                {{ request('kategori') ?? 'Semua Kategori' }}
+                                @if (request('kategori'))
+                                    {{ $kategoriList->where('id', request('kategori'))->first()?->nama_kategori }}
+                                @else
+                                    Semua Kategori
+                                @endif
                             </span>
                         </div>
                     </div>
@@ -179,7 +191,7 @@
                                 <td>
                                     @if ($item->status == 'pending')
                                         <span class="status-badge pending">
-                                            <i class="bi bi-clock"></i> Pending
+                                            <i class="bi bi-clock"></i> Menunggu
                                         </span>
                                     @elseif ($item->status == 'proses')
                                         <span class="status-badge proses">
